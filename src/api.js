@@ -9,6 +9,10 @@ class Api {
     #baseUrl;
     #headers;
 
+    #getResponse(res) {
+        return res.ok ? res.json() : Promise.reject('Ошибка на стороне сервера');
+    }
+
     constructor(config) {
         (this.#baseUrl = config.baseUrl), (this.#headers = config.headers);
     }
