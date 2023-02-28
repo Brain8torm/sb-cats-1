@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>B8 SB Cats</title>
+        <link rel="stylesheet" href="css/line-awesome.css" />
+        <link rel="stylesheet" href="css/index.css" />
+    </head>
+
+    <body>
+        <header class="header">
+            <div class="header__container container">
+                <div class="header__logo">
+                    <img src="img/sbcats-logo.svg" alt="TV Cats" />
+                </div>
+                <nav class="header__navbar navbar">
+                    <a href="#" class="navbar__item toggle-popup button button-circle"><span class="la la-plus"></span> Добавить</a>
+                </nav>
+            </div>
+        </header>
+        <main class="main container">
+            <section class="cards">
+
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__copytights">&copy; TV Cats <span class="footer__copyrights_year"></span></div>
+                <div class="footer__developer">
+                    <a href="https://brain8torm.ru/?utm_source=catssb.bsnet.ru&amp;utm_medium=dev_link">
+                        <img src="https://brain8torm.ru/images/bs-newlogo-88x31.png" alt="Разработка: Андрей Кудряшов" />
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+        <template id="card-template">
+            <div class="card">
+                <img
+                    src=""
+                    class="card__image"
+                    loading="lazy"
+                    alt=""
+                    sizes="(max-width: 500px) calc(100vw - 2rem), 
+                (max-width: 700px) calc(100vw - 6rem),
+                calc(100vw - 9rem - 200px)"
+                />
+                <div class="card__favorite">
+                    <span class="la la-heart-o la-2x card__favorite-icon"></span>
+                </div>
+                <div class="card__hover">
+                    <div class="card__content">
+                        <div class="card__title">Фигаро</div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="popup-card-template">
+            <div class="popup">
+                <div class="popup__container">
+                    <button class="popup__close popup-close icon close">
+                        <span class="la la-close"></span>
+                    </button>
+                    <div class="popup__body">
+                        <div class="popup__content">
+                            <div class="popup-card_image"><img src="" alt="" loading="lazy" /></div>
+                            <div class="popup-card_data">
+                                <div class="popup-card_rating rating">
+                                    <span class="la la-2x la-star-o rating__icon"></span> <span class="rating__value la-2x">0 / 10</span>
+                                </div>
+                                <div class="popup-card_title"></div>
+                                <div class="popup-card_year"></div>
+                                <div class="popup-card_favorite"></div>
+                                <div class="popup-card_description"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="popup-add-template">
+            <div class="popup">
+                <div class="popup__container">
+                    <button class="popup__close popup-close icon close">
+                        <span class="la la-close"></span>
+                    </button>
+                    <div class="popup__title">Добавить питомца</div>
+                    <div class="popup__body">
+                        <div class="popup__content">
+                            <form class="form" id="popup-form-add" method="post">
+                                <input type="number" class="input" name="id" min="1" required placeholder="id" />
+                                <input type="number" class="input" name="age" min="1" placeholder="Возраст" />
+                                <input type="text" class="input" name="name" required placeholder="Имя" />
+                                <input type="number" class="input" name="rate" placeholder="Рейтинг (0-10)" min="0" max="10" />
+
+                                <label class="form__checkbox-wrap">
+                                    <input type="checkbox" name="favorite" class="checkbox" placeholder="" />
+                                    <span class="label">Любимчик</span>
+                                </label>
+
+                                <input type="url" class="input" name="image" placeholder="Ссылка на фото" />
+                                <textarea name="description" class="textarea" placeholder="Описание" rows="2"></textarea>
+                                <button type="submit" class="button button-default">Добавить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <script src="src/cats.js" defer></script>
+        <script src="src/card.js" defer></script>
+        <script src="src/popup.js" defer></script>
+        <script src="src/popup-card.js" defer></script>
+        <script src="src/index.js" defer></script>
+    </body>
+</html>
