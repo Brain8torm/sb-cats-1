@@ -16,6 +16,10 @@ class Api {
     constructor(config) {
         (this.#baseUrl = config.baseUrl), (this.#headers = config.headers);
     }
+
+    getAllCats() {
+        return fetch(`${this.baseUrl}/show`).then(this.#getResponse);
+    }
 }
 
 export const api = new Api(config);
