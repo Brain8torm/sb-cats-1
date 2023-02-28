@@ -2,6 +2,7 @@ import { api } from './api.js';
 import { Card } from './card.js';
 import { PopupCard } from './popup-card.js';
 import { Popup } from './popup.js';
+import './utils.js';
 
 const cardsContainer = document.querySelector('.cards');
 const btnOpenPopup = document.querySelector('.toggle-popup');
