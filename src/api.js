@@ -22,7 +22,15 @@ class Api {
     }
 
     getCatById(idCat) {
-        return fetch(`${this.#baseUrl}/show/${idCat}`).then(this.#getResponse)
+        return fetch(`${this.#baseUrl}/show/${idCat}`).then(this.#getResponse);
+    }
+
+    addNewCat(data) {
+        return fetch(`${this.#baseUrl}/add`, {
+            method: 'POST',
+            headers: this.#headers,
+            body: JSON.stringify(data),
+        }).then(this.#getResponse);
     }
 }
 
