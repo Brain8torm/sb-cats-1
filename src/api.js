@@ -40,6 +40,12 @@ class Api {
             body: JSON.stringify(data),
         }).then(this.#getResponse);
     }
+
+    deleteCatById(idCat) {
+        return fetch(`${this.#baseUrl}/delete/${idCat}`, {
+            method: 'DELETE',
+        }).then(this.#getResponse);
+    }
 }
 
 export const api = new Api(config);
