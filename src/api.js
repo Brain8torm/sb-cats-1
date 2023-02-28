@@ -18,7 +18,11 @@ class Api {
     }
 
     getAllCats() {
-        return fetch(`${this.baseUrl}/show`).then(this.#getResponse);
+        return fetch(`${this.#baseUrl}/show`).then(this.#getResponse);
+    }
+
+    getCatById(idCat) {
+        return fetch(`${this.#baseUrl}/show/${idCat}`).then(this.#getResponse)
     }
 }
 
