@@ -5,6 +5,13 @@ const config = {
     },
 };
 
-class Api {}
+class Api {
+    #baseUrl;
+    #headers;
+
+    constructor(config) {
+        (this.#baseUrl = config.baseUrl), (this.#headers = config.headers);
+    }
+}
 
 export const api = new Api(config);
