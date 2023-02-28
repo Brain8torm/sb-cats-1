@@ -32,16 +32,22 @@ function handleCardMouseLeave(target) {
     target.style.opacity = '';
 }
 
-cats.forEach((catData) => {
-    const newElement = new Card(
-        catData,
-        '#card-template',
-        handleCardMouseEnter,
-        handleCardMouseLeave,
-        handleCardClick
-    );
-    cardsContainer.append(newElement.getElement());
-});
+api.getAllCats()
+    .then((data) => {
+        data.forEach((catData) => {
+            const newElement = new Card(
+                catData,
+                '#card-template',
+                handleCardMouseEnter,
+                handleCardMouseLeave,
+                handleCardClick
+            );
+            cardsContainer.append(newElement.getElement());
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 cards.forEach((card) => {
     card.addEventListener('mouseenter', (e) => {
@@ -61,27 +67,32 @@ btnOpenPopup.addEventListener('click', (e) => {
         popupAdd.setEventListener();
         popupAdd.open();
     }
-  
+
     const formCatsAdd = document.querySelector('#popup-form-add');
     formCatsAdd.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const elementsFormCat = [...formCatsAdd.elements];
         const formData = serializeForm(elementsFormCat);
-  
-        const newElement = new Card(
-            formData,
-            '#card-template',
-            handleCardMouseEnter,
-            handleCardMouseLeave,
-            handleCardClick
-        );
+        api.addNewCat(formData)
+            .then(() => {
+                const newElement = new Card(
+                    formData,
+                    '#card-template',
+                    handleCardMouseEnter,
+                    handleCardMouseLeave,
+                    handleCardClick
+                );
 
-        cardsContainer.append(newElement.getElement());
-        
-        setTimeout(() => {
-            popupAdd.close();
-        }, 1000)
+                cardsContainer.append(newElement.getElement());
+
+                setTimeout(() => {
+                    popupAdd.close();
+                }, 1000);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     });
 });
 
