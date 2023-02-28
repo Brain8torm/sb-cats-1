@@ -32,6 +32,14 @@ class Api {
             body: JSON.stringify(data),
         }).then(this.#getResponse);
     }
+
+    updateCatById(idCat, data) {
+        return fetch(`${this.#baseUrl}/update/${idCat}`, {
+            method: 'PUT',
+            headers: this.#headers,
+            body: JSON.stringify(data),
+        }).then(this.#getResponse);
+    }
 }
 
 export const api = new Api(config);
