@@ -1,4 +1,4 @@
-const cats = [
+export const cats = [
   {
       "id": 319,
       "name": "Фигаро",

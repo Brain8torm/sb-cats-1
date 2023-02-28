@@ -1,3 +1,8 @@
+import { Card } from './card.js';
+import { cats } from './cats.js';
+import { PopupCard } from './popup-card.js';
+import { Popup } from './popup.js';
+
 const cardsContainer = document.querySelector('.cards');
 const btnOpenPopup = document.querySelector('.toggle-popup');
 const cards = cardsContainer.querySelectorAll('.card');
