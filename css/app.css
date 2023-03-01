@@ -489,6 +489,10 @@ button.icon:not(:disabled) {
     }
 }
 
+#popup-form-login .button {
+        grid-column: unset;
+}
+
 .button:not(:disabled) {
     cursor: pointer;
 }
@@ -574,6 +578,15 @@ button.icon:not(:disabled) {
 .footer__developer a {
     display: inherit;
 }
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
 
 @keyframes zoomIn {
     from {
