@@ -14,6 +14,7 @@ const cards = cardsContainer.querySelectorAll('.card');
 let popupAdd = null;
 let popupCard = null;
 let popupLogin = null;
+
 const isAuth = Cookies.get('email');
 
 document.addEventListener('DOMContentLoaded', () => {
