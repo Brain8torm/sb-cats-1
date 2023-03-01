@@ -40,7 +40,9 @@ export class Card {
         const cardHoverElement = this.#element.querySelector('.card__hover');
 
         cardTitleElement.textContent = this.#data.name;
-        cardImageElement.src = this.#data.image;
+        if (this.#data.image) {
+            cardImageElement.src = this.#data.image;
+        }
 
         cardHoverElement.addEventListener('click', () => {
             this.#handleCardClick(this.#data);

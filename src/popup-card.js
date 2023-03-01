@@ -13,7 +13,9 @@ export class PopupCard extends Popup {
     const popupCardRatingEl = this._popupElement.querySelector('.popup-card_rating .rating__value');
     const popupCardDescrEl = this._popupElement.querySelector('.popup-card_description');
 
-    popupCardImageEl.src = data.image;
+    if (data.image) {
+      popupCardImageEl.src = data.image;
+    }
     popupCardImageEl.alt = data.name;
 
     popupCardTitleEl.textContent = data.name;
