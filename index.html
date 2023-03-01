@@ -17,6 +17,8 @@
                 </div>
                 <nav class="header__navbar navbar">
                     <a href="#" class="navbar__item toggle-popup button button-circle"><span class="la la-plus"></span> Добавить</a>
+                    <a href="#" class="navbar__item toggle-login-popup button button-circle"><span class="la la-sign-in-alt"></span> Войти</a>
+                    <a href="#" class="navbar__item toggle-logout button button-circle"><span class="la la-sign-out-alt"></span> Выйти</a>
                 </nav>
             </div>
         </header>
@@ -106,6 +108,26 @@
                                 <input type="url" class="input" name="image" placeholder="Ссылка на фото" />
                                 <textarea name="description" class="textarea" placeholder="Описание" rows="2"></textarea>
                                 <button type="submit" class="button button-default">Добавить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="popup-login-template">
+            <div class="popup">
+                <div class="popup__container">
+                    <button class="popup__close popup-close icon close">
+                        <span class="la la-close"></span>
+                    </button>
+                    <div class="popup__title">Авторизация</div>
+                    <div class="popup__body">
+                        <div class="popup__content">
+                            <form class="form" id="popup-form-login" method="post">
+                                <input type="email" class="input" name="email" required placeholder="E-mail" />
+                                <input type="password" class="input" name="password" placeholder="Пароль" />
+                                <button type="submit" class="button button-default">Войти</button>
                             </form>
                         </div>
                     </div>

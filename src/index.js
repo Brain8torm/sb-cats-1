@@ -3,15 +3,51 @@ import { Card } from './card.js';
 import { PopupCard } from './popup-card.js';
 import { Popup } from './popup.js';
 import './utils.js';
+import Cookies from './js.cookie.min.mjs';
 
 const cardsContainer = document.querySelector('.cards');
 const btnOpenPopup = document.querySelector('.toggle-popup');
+const btnOpenPopupLogin = document.querySelector('.toggle-login-popup');
+const btnLogout = document.querySelector('.toggle-logout');
 const cards = cardsContainer.querySelectorAll('.card');
+
 let popupAdd = null;
 let popupCard = null;
+let popupLogin = null;
+
+const isAuth = Cookies.get('email');
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.footer__copyrights_year').textContent = new Date().getFullYear();
+
+    popupLogin = new Popup('#popup-login-template', 'popup-login');
+    if (!isAuth) {
+        btnLogout.classList.add('hidden');
+        btnOpenPopup.classList.add('hidden');
+        if (!document.body.contains(document.querySelector('.popup-login'))) {
+            
+            document.body.append(popupLogin.getElement());
+            popupLogin.setEventListener();
+            popupLogin.open();
+            
+            const formLogin = document.querySelector('#popup-form-login');
+            formLogin.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const elementsFormLogin = [...formLogin.elements];
+                const formData = serializeForm(elementsFormLogin);
+                Cookies.set('email', formData.email, {expires: 1});
+                popupLogin.close();
+                btnOpenPopupLogin.classList.add('hidden');
+                btnLogout.classList.remove('hidden');
+                btnOpenPopup.classList.remove('hidden');
+
+            });
+        }
+    } else {
+        btnOpenPopupLogin.classList.add('hidden');
+        btnLogout.classList.remove('hidden');
+        btnOpenPopup.classList.remove('hidden');
+    }
 });
 
 function handleCardClick(data) {
@@ -94,6 +130,26 @@ btnOpenPopup.addEventListener('click', (e) => {
                 console.log(err);
             });
     });
+});
+
+btnOpenPopupLogin.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!isAuth) {
+        popupLogin = new Popup('#popup-login-template', 'popup-login');
+        if (!document.body.contains(document.querySelector('.popup-login'))) {
+            document.body.append(popupLogin.getElement());
+            popupLogin.setEventListener();
+            popupLogin.open();
+        }
+    }
+});
+
+btnLogout.addEventListener('click', (e)=> {
+    e.preventDefault();
+    Cookies.remove('email');
+    btnLogout.classList.add('hidden');
+    btnOpenPopupLogin.classList.remove('hidden');
+    btnOpenPopup.classList.add('hidden');
 });
 
 function serializeForm(elements) {
