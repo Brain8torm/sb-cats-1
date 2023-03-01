@@ -2,7 +2,6 @@ import { api } from './api.js';
 import { Card } from './card.js';
 import { PopupCard } from './popup-card.js';
 import { Popup } from './popup.js';
-import './utils.js';
 import Cookies from './js.cookie.min.mjs';
 
 const cardsContainer = document.querySelector('.cards');
