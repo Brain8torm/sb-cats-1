@@ -277,6 +277,21 @@ html {
     text-align: right;
 }
 
+.popup-card_image {
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.popup-card_image img {
+    transition: all .5s ease-in-out;
+}
+
+.popup-card_image img:hover {
+    transform: scale(1.5);
+   
+}
+
 .rating__icon {
     color: #ff8f17;
 }
