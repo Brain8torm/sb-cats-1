@@ -2,8 +2,8 @@ import { Popup } from './popup.js';
 
 export class PopupCard extends Popup {
 
-  constructor(selectorTemplate, classes) {
-    super(selectorTemplate, classes);
+  constructor(selectorTemplate, selectorContent, title, classes) {
+    super(selectorTemplate, selectorContent, title, classes);
   }
 
   open(data) {

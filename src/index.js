@@ -20,7 +20,7 @@ const isAuth = Cookies.get('email');
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.footer__copyrights_year').textContent = new Date().getFullYear();
 
-    popupLogin = new Popup('#popup-login-template', 'popup-login');
+    popupLogin = new Popup('#popup-template', '#form-add-content', 'Авторизация', 'popup-login');
     if (!isAuth) {
         btnLogout.classList.add('hidden');
         btnOpenPopup.classList.add('hidden');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleCardClick(data) {
-    popupCard = new PopupCard('#popup-card-template', 'popup-card');
+    popupCard = new PopupCard('#popup-template', '#popup-card-template', '', 'popup-card');
 
     if (!document.body.contains(document.querySelector('.popup-card'))) {
         document.body.append(popupCard.getElement());
@@ -80,7 +80,7 @@ cards.forEach((card) => {
 btnOpenPopup.addEventListener('click', (e) => {
     e.preventDefault();
 
-    popupAdd = new Popup('#popup-add-template', 'popup-add');
+    popupAdd = new Popup('#popup-template', '#form-add-content', 'Добавить питомца', 'popup-add');
     if (!document.body.contains(document.querySelector('.popup-add'))) {
         document.body.append(popupAdd.getElement());
         popupAdd.setEventListener();
@@ -110,7 +110,7 @@ btnOpenPopup.addEventListener('click', (e) => {
 btnOpenPopupLogin.addEventListener('click', (e) => {
     e.preventDefault();
     if (!isAuth) {
-        popupLogin = new Popup('#popup-login-template', 'popup-login');
+        popupLogin = new Popup('#popup-template', '#form-add-content', 'Авторизация', 'popup-login');
         if (!document.body.contains(document.querySelector('.popup-login'))) {
             document.body.append(popupLogin.getElement());
             popupLogin.setEventListener();
