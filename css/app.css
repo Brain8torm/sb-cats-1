@@ -154,24 +154,44 @@ html {
     justify-content: center;
 }
 
-.card__favorite {
+.card__favorite,
+.card__edit,
+.card__delete {
     position: absolute;
     right: -52px;
-    top: 0;
     padding: 10px;
     opacity: 0;
     transition: right 0.3s ease-in, opacity 0.8s ease;
 }
 
-.card:hover .card__favorite {
+.card__favorite {
+    top: 0;
+}
+
+.card__edit {
+    top: 50px;
+    transition-delay: 100ms;
+}
+
+.card__delete {
+    top: 100px;
+    transition-delay: 100ms;
+}
+
+.card:hover .card__favorite,
+.card:hover .card__edit,
+.card:hover .card__delete {
     opacity: 1;
     right: 0;
     display: flex;
     align-items: center;
     z-index: 1;
+    
 }
 
-.card__favorite-icon {
+.card__favorite-icon,
+.card__edit-icon,
+.card__delete-icon {
     color: #000;
     cursor: pointer;
 }
