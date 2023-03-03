@@ -154,24 +154,44 @@ html {
     justify-content: center;
 }
 
-.card__favorite {
+.card__favorite,
+.card__edit,
+.card__delete {
     position: absolute;
     right: -52px;
-    top: 0;
     padding: 10px;
     opacity: 0;
     transition: right 0.3s ease-in, opacity 0.8s ease;
 }
 
-.card:hover .card__favorite {
+.card__favorite {
+    top: 0;
+}
+
+.card__edit {
+    top: 50px;
+    transition-delay: 100ms;
+}
+
+.card__delete {
+    top: 100px;
+    transition-delay: 100ms;
+}
+
+.card:hover .card__favorite,
+.card:hover .card__edit,
+.card:hover .card__delete {
     opacity: 1;
     right: 0;
     display: flex;
     align-items: center;
     z-index: 1;
+    
 }
 
-.card__favorite-icon {
+.card__favorite-icon,
+.card__edit-icon,
+.card__delete-icon {
     color: #000;
     cursor: pointer;
 }
@@ -275,6 +295,21 @@ html {
     right: 0;
     top: 0;
     text-align: right;
+}
+
+.popup-card_image {
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.popup-card_image img {
+    transition: all .5s ease-in-out;
+}
+
+.popup-card_image img:hover {
+    transform: scale(1.5);
+   
 }
 
 .rating__icon {
@@ -489,6 +524,10 @@ button.icon:not(:disabled) {
     }
 }
 
+#popup-form-login .button {
+        grid-column: unset;
+}
+
 .button:not(:disabled) {
     cursor: pointer;
 }
@@ -574,6 +613,15 @@ button.icon:not(:disabled) {
 .footer__developer a {
     display: inherit;
 }
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
 
 @keyframes zoomIn {
     from {
