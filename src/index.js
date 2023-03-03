@@ -14,13 +14,14 @@ const cards = cardsContainer.querySelectorAll('.card');
 let popupAdd = null;
 let popupCard = null;
 let popupLogin = null;
+let popupEdit = null;
 
 const isAuth = Cookies.get('email');
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.footer__copyrights_year').textContent = new Date().getFullYear();
 
-    popupLogin = new Popup('#popup-template', '#form-add-content', 'Авторизация', 'popup-login');
+    popupLogin = new Popup('#popup-template', '#form-auth', 'Авторизация', 'popup-login');
     if (!isAuth) {
         btnLogout.classList.add('hidden');
         btnOpenPopup.classList.add('hidden');
@@ -84,7 +85,13 @@ btnOpenPopup.addEventListener('click', (e) => {
     if (!document.body.contains(document.querySelector('.popup-add'))) {
         document.body.append(popupAdd.getElement());
         popupAdd.setEventListener();
-        popupAdd.open();
+        const data = {
+            id: Math.floor(Math.random() * 1000) + 1,
+            age: new Date().getFullYear(),
+            rate: Math.floor(Math.random() * 10) + 1,
+        };
+
+        popupAdd.open(data);
     }
 
     const formCatsAdd = document.querySelector('#popup-form-add');
@@ -99,7 +106,7 @@ btnOpenPopup.addEventListener('click', (e) => {
                 updateLocalStorage(formData, { type: 'ADD_CAT' });
                 setTimeout(() => {
                     popupAdd.close();
-                }, 1000);
+                }, 100);
             })
             .catch((err) => {
                 console.log(err);
@@ -110,7 +117,12 @@ btnOpenPopup.addEventListener('click', (e) => {
 btnOpenPopupLogin.addEventListener('click', (e) => {
     e.preventDefault();
     if (!isAuth) {
-        popupLogin = new Popup('#popup-template', '#form-add-content', 'Авторизация', 'popup-login');
+        popupLogin = new Popup(
+            '#popup-template',
+            '#form-add-content',
+            'Авторизация',
+            'popup-login'
+        );
         if (!document.body.contains(document.querySelector('.popup-login'))) {
             document.body.append(popupLogin.getElement());
             popupLogin.setEventListener();
@@ -147,6 +159,10 @@ function checkLocalStorage() {
     const localData = JSON.parse(localStorage.getItem('cats'));
     const getTimeExpires = localStorage.getItem('catsRefresh');
 
+    if (cardsContainer.childNodes.length !== 0) {
+        cardsContainer.innerHTML = '';
+    }
+
     if (localData && localData.length && new Date() < new Date(getTimeExpires)) {
         localData.forEach((catData) => {
             createCard(catData);
@@ -158,7 +174,6 @@ function checkLocalStorage() {
                     createCard(catData);
                 });
                 setDataRefresh(MAX_LIVE_STORAGE, 'catsRefresh');
-                //localStorage.setItem('cats', JSON.stringify(data));
                 updateLocalStorage(data, { type: 'ALL_CATS' });
             })
             .catch((err) => {
@@ -186,6 +201,13 @@ function updateLocalStorage(data, action) {
             setDataRefresh(MAX_LIVE_STORAGE, 'catsRefresh');
             localStorage.setItem('cats', JSON.stringify(data));
             return;
+        case 'DELETE_CAT':
+            const newStorage = oldStorage.filter((cat) => cat.id !== data);
+            localStorage.setItem('cats', JSON.stringify(newStorage));
+        case 'EDIT_CAT':
+            const updateStorage = oldStorage.map((cat) => (cat.id !== data.id ? cat : data));
+            localStorage.setItem('cats', JSON.stringify(updateStorage));
+            console.log('обновлено в хранилище');
         default:
             break;
     }
@@ -197,8 +219,65 @@ function createCard(data) {
         '#card-template',
         handleCardMouseEnter,
         handleCardMouseLeave,
-        handleCardClick
+        handleCardClick,
+        handleCardEdit,
+        handleCardDelete
     );
 
     cardsContainer.append(newElement.getElement());
+}
+
+function handleCardEdit(target) {
+    popupEdit = new Popup(
+        '#popup-template',
+        '#form-add-content',
+        'Редактировать питомца',
+        'popup-edit'
+    );
+    if (!document.body.contains(document.querySelector('.popup-edit'))) {
+        document.body.append(popupEdit.getElement());
+        popupEdit.setEventListener();
+        api.getCatById(target.dataset.id).then((data) => {
+            popupEdit.open(data);
+        });
+    }
+
+    const formCatsEdit = document.querySelector('.popup-edit #popup-form-add');
+    formCatsEdit.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const elementsFormCat = [...formCatsEdit.elements];
+        const oldData = JSON.parse(localStorage.getItem('formData'));
+        const formData = serializeForm(elementsFormCat);
+        const postData = {};
+
+        Object.entries(formData).forEach((entry) => {
+            const [key, value] = entry;
+            if (key !== 'id' && value != oldData[key]) {
+                postData[key] = value;
+            }
+        });
+
+        if (postData) {
+            api.updateCatById(formData.id, postData)
+                .then(() => {
+                    updateLocalStorage(formData, { type: 'EDIT_CAT' });
+                    setTimeout(() => {
+                        popupEdit.close();
+                        checkLocalStorage();
+                    }, 100);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    });
+}
+
+function handleCardDelete(target) {
+    const cardId = target.dataset.id;
+    target.remove();
+    api.deleteCatById(cardId);
+    localStorage.removeItem('catsRefresh');
+    updateLocalStorage(cardId, 'DELETE_CAT');
 }

@@ -1,6 +1,6 @@
 export class Popup {
     #selectorTemplate;
-    #selectorContent;
+    //#selectorContent;
 
     #getTemplate() {
         const template = document
@@ -10,8 +10,7 @@ export class Popup {
     }
 
     #getContent() {
-        return document.querySelector(this.#selectorContent)
-            .content /*.querySelector('.content-block')*/;
+        return document.querySelector(this._selectorContent).content;
     }
 
     #handleEscUp = (evt) => {
@@ -22,7 +21,7 @@ export class Popup {
 
     constructor(selectorTemplate, selectorContent, title, classes) {
         this.#selectorTemplate = selectorTemplate;
-        this.#selectorContent = selectorContent;
+        this._selectorContent = selectorContent;
         this._title = title;
         this._classes = classes.split(',');
     }
@@ -50,23 +49,49 @@ export class Popup {
         return this._popupContent;
     }
 
-    open() {
+    open(data) {
         this._popupElement.classList.add('popup-active');
 
-        /*if (this._popupElement.classList.contains('popup-add')) {
-            this._popupElement.querySelector('[name="id"]').value =
-                Math.floor(Math.random() * 1000) + 1;
-            this._popupElement.querySelector('[name="age"]').value = new Date().getFullYear();
-            this._popupElement.querySelector('[name="rate"]').value =
-                Math.floor(Math.random() * 10) + 1;
-            document.addEventListener('keyup', this.#handleEscUp);
+        const inputId = this._popupElement.querySelector('[name="id"]');
+        const inputName = this._popupElement.querySelector('[name="name"]');
+        const inputAge = this._popupElement.querySelector('[name="age"]');
+        const inputRate = this._popupElement.querySelector('[name="rate"]');
+        const inputFavorite = this._popupElement.querySelector('[name="favorite"]');
+        const inputImage = this._popupElement.querySelector('[name="image"]');
+        const inputDescr = this._popupElement.querySelector('[name="description"]');
+        const popupClasses = this._popupElement.classList;
+
+        if (popupClasses.contains('popup-add') || popupClasses.contains('popup-edit')) {
+            if (popupClasses.contains('popup-edit')) {
+                inputId.disabled = true;
+                this._popupElement.querySelector('.button').textContent = 'Изменить';
+                localStorage.setItem('formData', JSON.stringify(data));
+            }
+
+            inputId.value = data.id ? data.id : '';
+            inputAge.value = data.age ? data.age : '';
+            inputRate.value = data.rate ? data.rate : '';
+            inputName.value = data.name ? data.name : '';
+            inputImage.value = data.image ? data.image : '';
+            inputDescr.value = data.description ? data.description : '';
+            if (data.favorite) inputFavorite.checked = true;
+
             this._popupElement.querySelector('#popup-form-add input:first-child').focus();
-        }*/
+        }
+
+        document.addEventListener('keyup', this.#handleEscUp);
     }
 
     close() {
         this._popupElement.classList.remove('popup-active');
         document.removeEventListener('keyup', this.#handleEscUp);
+
+        const popupClasses = this._popupElement.classList;
+        
+        if (popupClasses.contains('popup-add') || popupClasses.contains('popup-edit')) {
+            localStorage.removeItem('formData');
+        }
+
         this._popupElement.remove();
     }
 

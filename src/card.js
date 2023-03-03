@@ -5,6 +5,8 @@ export class Card {
     #handleCardClick;
     #handleCardMouseEnter;
     #handleCardMouseLeave;
+    #handleCardEdit;
+    #handleCardDelete;
 
     #getTemplate() {
         const template = document
@@ -18,13 +20,17 @@ export class Card {
         selectorTemplate,
         handleCardMouseEnter,
         handleCardMouseLeave,
-        handleCardClick
+        handleCardClick,
+        handleCardEdit,
+        handleCardDelete
     ) {
         this.#data = data;
         this.#selectorTemplate = selectorTemplate;
         this.#handleCardClick = handleCardClick;
         this.#handleCardMouseEnter = handleCardMouseEnter;
         this.#handleCardMouseLeave = handleCardMouseLeave;
+        this.#handleCardEdit = handleCardEdit;
+        this.#handleCardDelete = handleCardDelete;
     }
 
     getElement() {
@@ -34,6 +40,7 @@ export class Card {
 
         if (this.#data.favorite) cardClass.push('card-favorite');
         this.#element.classList.add(...cardClass);
+        this.#element.dataset.id = this.#data.id;
 
         const cardTitleElement = this.#element.querySelector('.card__title');
         const cardImageElement = this.#element.querySelector('.card__image');
@@ -54,6 +61,14 @@ export class Card {
 
         this.#element.addEventListener('mouseleave', (e) => {
             this.#handleCardMouseLeave(e.target.querySelector('.card__hover'));
+        });
+
+        this.#element.querySelector('.card__edit').addEventListener('click', (e) => {
+            this.#handleCardEdit(this.#element);
+        })
+
+        this.#element.querySelector('.card__delete').addEventListener('click', (e) => {
+            this.#handleCardDelete(this.#element);
         });
 
         return this.#element;
