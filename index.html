@@ -67,6 +67,17 @@
         <template id="popup-card-template">
             <div class="popup-card_image">
                 <img src="https://sbcats.bsnet.ru/img/cat-noname.png" alt="" loading="lazy" />
+                <div class="popup-card_actions">
+                    <div class="popup-card__favorite">
+                        <span class="la la-heart-o la-2x card__favorite-icon"></span>
+                    </div>
+                    <div class="popup-card__edit">
+                        <span class="la la-edit la-2x card__edit-icon"></span>
+                    </div>
+                    <div class="popup-card__delete">
+                        <span class="la la-times la-2x card__delete-icon"></span>
+                    </div>
+                </div>
             </div>
             <div class="popup-card_data">
                 <div class="popup-card_rating rating">
@@ -77,10 +88,6 @@
                 <div class="popup-card_year"></div>
                 <div class="popup-card_favorite"></div>
                 <div class="popup-card_description"></div>
-                <div class="popup-card_actions card-actions">
-                    <button class="card-actions_edit button button-default" type="button"><span class="la la-edit"></span> Изменить</button>
-                    <button class="card-actions_delete button button-default" type="button"><span class="la la-remove"></span> Удалить</button>
-                </div>
             </div>
         </template>
 
@@ -122,6 +129,19 @@
                 <input type="password" class="input" name="password" placeholder="Пароль" />
                 <button type="submit" class="button button-default">Войти</button>
             </form>
+        </template>
+
+        <template id="notify-template">
+            <div class="notify notify-bottom-center">
+                <div class="notify-message">
+                    <button class="notify__close notify-close icon close">
+                        <span class="la la-close"></span>
+                    </button>
+                    <div class="notify__body">
+                        <div class="notify__content"></div>
+                    </div>
+                </div>
+            </div>
         </template>
 
         <script src="./src/index.js" defer type="module"></script>

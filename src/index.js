@@ -3,6 +3,7 @@ import { Card } from './card.js';
 import { PopupCard } from './popup-card.js';
 import { Popup } from './popup.js';
 import Cookies from './js.cookie.min.mjs';
+import { Notify } from './notify.js';
 
 const MAX_LIVE_STORAGE = 10;
 const cardsContainer = document.querySelector('.cards');
@@ -15,6 +16,7 @@ let popupAdd = null;
 let popupCard = null;
 let popupLogin = null;
 let popupEdit = null;
+let notify = null;
 
 const isAuth = Cookies.get('email');
 
@@ -37,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = serializeForm(elementsFormLogin);
                 Cookies.set('email', formData.email, { expires: 1 });
                 popupLogin.close();
+                notify = new Notify('#notify-template', 'Вы вошли :)', 'notify-message-success');
+                document.body.append(notify.getElement());
+                notify.setEventListener();
+                notify.open();
                 btnOpenPopupLogin.classList.add('hidden');
                 btnLogout.classList.remove('hidden');
                 btnOpenPopup.classList.remove('hidden');
@@ -52,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleCardClick(data) {
-    popupCard = new PopupCard('#popup-template', '#popup-card-template', '', 'popup-card');
+    const classes = ['popup-card']; 
+    if ( data.favorite ) classes.push('card-favorite');
+    popupCard = new PopupCard('#popup-template', '#popup-card-template', '', classes.join(','));
 
     if (!document.body.contains(document.querySelector('.popup-card'))) {
         document.body.append(popupCard.getElement());
@@ -104,12 +112,22 @@ btnOpenPopup.addEventListener('click', (e) => {
             .then(() => {
                 createCard(formData);
                 updateLocalStorage(formData, { type: 'ADD_CAT' });
+
                 setTimeout(() => {
                     popupAdd.close();
+                    notify = new Notify(
+                        '#notify-template',
+                        'Вы добавили мульт-котика',
+                        'notify-message-success'
+                    );
+                    document.body.append(notify.getElement());
+                    notify.setEventListener();
+                    notify.open();
                 }, 100);
             })
             .catch((err) => {
-                console.log(err);
+                notify = new Notify('#notify-template', err, 'notify-message-danger');
+                notify.open();
             });
     });
 });
@@ -137,6 +155,10 @@ btnLogout.addEventListener('click', (e) => {
     btnLogout.classList.add('hidden');
     btnOpenPopupLogin.classList.remove('hidden');
     btnOpenPopup.classList.add('hidden');
+    notify = new Notify('#notify-template', 'Вы вышли :(', 'notify-message-warning');
+    document.body.append(notify.getElement());
+    notify.setEventListener();
+    notify.open();
 });
 
 function serializeForm(elements) {
@@ -177,7 +199,8 @@ function checkLocalStorage() {
                 updateLocalStorage(data, { type: 'ALL_CATS' });
             })
             .catch((err) => {
-                console.log(err);
+                notify = new Notify('#notify-template', err, 'notify-message-danger');
+                notify.open();
             });
     }
 }
@@ -230,76 +253,121 @@ function createCard(data) {
 }
 
 function handleCardEdit(instance) {
-    popupEdit = new Popup(
-        '#popup-template',
-        '#form-add-content',
-        'Редактировать котика',
-        'popup-edit'
-    );
-    if (!document.body.contains(document.querySelector('.popup-edit'))) {
-        document.body.append(popupEdit.getElement());
-        popupEdit.setEventListener();
-        popupEdit.open(instance.getData());
-    }
+    if (isAuth) {
+        popupEdit = new Popup(
+            '#popup-template',
+            '#form-add-content',
+            'Редактировать котика',
+            'popup-edit'
+        );
+        if (!document.body.contains(document.querySelector('.popup-edit'))) {
+            document.body.append(popupEdit.getElement());
+            popupEdit.setEventListener();
+            popupEdit.open(instance.getData());
+        }
 
-    const formCatsEdit = document.querySelector('.popup-edit #popup-form-add');
-    formCatsEdit.addEventListener('submit', (e) => {
-        e.preventDefault();
+        const formCatsEdit = document.querySelector('.popup-edit #popup-form-add');
+        formCatsEdit.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        const elementsFormCat = [...formCatsEdit.elements];
-        const formData = serializeForm(elementsFormCat);
-        const postData = {};
+            const elementsFormCat = [...formCatsEdit.elements];
+            const formData = serializeForm(elementsFormCat);
+            const postData = {};
 
-        Object.entries(formData).forEach((entry) => {
-            const [key, value] = entry;
+            Object.entries(formData).forEach((entry) => {
+                const [key, value] = entry;
 
-            if (key !== 'id' && value != instance.getData()[key]) {
-                postData[key] = value;
+                if (key !== 'id' && value != instance.getData()[key]) {
+                    postData[key] = value;
+                }
+            });
+
+            if (postData) {
+                api.updateCatById(formData.id, postData)
+                    .then(() => {
+                        instance.setData(postData);
+                        updateLocalStorage(formData, { type: 'EDIT_CAT' });
+                        setTimeout(() => {
+                            popupEdit.close();
+                            checkLocalStorage();
+                            notify = new Notify(
+                                '#notify-template',
+                                'Вы изменили данные о котике',
+                                'notify-message-success'
+                            );
+                            document.body.append(notify.getElement());
+                            notify.setEventListener();
+                            notify.open();
+                        }, 100);
+                    })
+                    .catch((err) => {
+                        notify = new Notify('#notify-template', err, 'notify-message-danger');
+                        notify.open();
+                    });
             }
         });
-
-        if (postData) {
-            api.updateCatById(formData.id, postData)
-                .then(() => {
-                    instance.setData(postData);
-                    updateLocalStorage(formData, { type: 'EDIT_CAT' });
-                    setTimeout(() => {
-                        popupEdit.close();
-                        checkLocalStorage();
-                    }, 100);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    });
+    } else {
+        notify = new Notify('#notify-template', 'Вы не авторизованы', 'notify-message-danger');
+        document.body.append(notify.getElement());
+        notify.setEventListener();
+        notify.open();
+    }
 }
 
 function handleCardLike(instance) {
     const cardId = instance.getElement().dataset.id;
     const data = instance.getData();
     const favoriteNew = data.favorite ? false : true;
-    
+
     data.favorite = favoriteNew;
-    api.updateCatById(cardId, data).then(() => {
-        instance.setData(data);
-        updateLocalStorage(data, { type: 'EDIT_CAT' });
-        setTimeout(() => {
-            checkLocalStorage();
-        }, 100);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+    api.updateCatById(cardId, data)
+        .then(() => {
+            instance.setData(data);
+            updateLocalStorage(data, { type: 'EDIT_CAT' });
+            setTimeout(() => {
+                checkLocalStorage();
+                notify = new Notify(
+                    '#notify-template',
+                    favoriteNew ? 'Вам понравился котик!' : 'Вам разонравился котик :(',
+                    favoriteNew ? 'notify-message-success' : 'notify-message-danger'
+                );
+                document.body.append(notify.getElement());
+                notify.setEventListener();
+                notify.open();
+            }, 100);
+        })
+        .catch((err) => {
+            notify = new Notify('#notify-template', err, 'notify-message-danger');
+            notify.open();
+        });
 }
 
 function handleCardDelete(instance) {
-    const startDel = confirm("Вы действительно собираетесь удалить кота?");
-    const cardId = instance.getElement().dataset.id;
-    if (startDel) {
-        instance.getElement().remove();
-        api.deleteCatById(cardId);
-        localStorage.removeItem('catsRefresh');
-        updateLocalStorage(cardId, 'DELETE_CAT');
+    if (isAuth) {
+        const startDel = confirm('Вы действительно собираетесь удалить кота?');
+        const cardId = instance.getElement().dataset.id;
+        if (startDel) {
+            //instance.getElement().remove();
+            api.deleteCatById(cardId);
+            localStorage.removeItem('catsRefresh');
+            updateLocalStorage(cardId, 'DELETE_CAT');
+
+            setTimeout(() => {
+                checkLocalStorage();
+                notify = new Notify(
+                    '#notify-template',
+                    'Вы удалили котика',
+                    'notify-message-danger'
+                );
+                document.body.append(notify.getElement());
+                notify.setEventListener();
+                notify.open();
+            }, 100);
+        }
+    } else {
+        notify = new Notify('#notify-template', 'Вы не авторизованы', 'notify-message-danger');
+        document.body.append(notify.getElement());
+        notify.setEventListener();
+        notify.open();
     }
 }
