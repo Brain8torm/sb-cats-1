@@ -84,11 +84,13 @@ html {
 .card {
     display: flex;
     align-items: center;
+    min-height: 230px;
 }
 
 .card__image {
     display: block;
     border-radius: 6px;
+    
 }
 
 .card__hover {

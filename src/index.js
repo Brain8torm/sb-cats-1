@@ -4,7 +4,7 @@ import { PopupCard } from './popup-card.js';
 import { Popup } from './popup.js';
 import Cookies from './js.cookie.min.mjs';
 
-const MAX_LIVE_STORAGE = 1;
+const MAX_LIVE_STORAGE = 10;
 const cardsContainer = document.querySelector('.cards');
 const btnOpenPopup = document.querySelector('.toggle-popup');
 const btnOpenPopupLogin = document.querySelector('.toggle-login-popup');
@@ -205,9 +205,10 @@ function updateLocalStorage(data, action) {
             const newStorage = oldStorage.filter((cat) => cat.id !== data);
             localStorage.setItem('cats', JSON.stringify(newStorage));
         case 'EDIT_CAT':
-            const updateStorage = oldStorage.map((cat) => (cat.id !== data.id ? cat : data));
+            const updateStorage = oldStorage.map((cat) => {
+                return Number(cat.id) !== Number(data.id) ? cat : data;
+            });
             localStorage.setItem('cats', JSON.stringify(updateStorage));
-            console.log('обновлено в хранилище');
         default:
             break;
     }
@@ -221,25 +222,24 @@ function createCard(data) {
         handleCardMouseLeave,
         handleCardClick,
         handleCardEdit,
-        handleCardDelete
+        handleCardDelete,
+        handleCardLike
     );
 
     cardsContainer.append(newElement.getElement());
 }
 
-function handleCardEdit(target) {
+function handleCardEdit(instance) {
     popupEdit = new Popup(
         '#popup-template',
         '#form-add-content',
-        'Редактировать питомца',
+        'Редактировать котика',
         'popup-edit'
     );
     if (!document.body.contains(document.querySelector('.popup-edit'))) {
         document.body.append(popupEdit.getElement());
         popupEdit.setEventListener();
-        api.getCatById(target.dataset.id).then((data) => {
-            popupEdit.open(data);
-        });
+        popupEdit.open(instance.getData());
     }
 
     const formCatsEdit = document.querySelector('.popup-edit #popup-form-add');
@@ -247,13 +247,13 @@ function handleCardEdit(target) {
         e.preventDefault();
 
         const elementsFormCat = [...formCatsEdit.elements];
-        const oldData = JSON.parse(localStorage.getItem('formData'));
         const formData = serializeForm(elementsFormCat);
         const postData = {};
 
         Object.entries(formData).forEach((entry) => {
             const [key, value] = entry;
-            if (key !== 'id' && value != oldData[key]) {
+
+            if (key !== 'id' && value != instance.getData()[key]) {
                 postData[key] = value;
             }
         });
@@ -261,6 +261,7 @@ function handleCardEdit(target) {
         if (postData) {
             api.updateCatById(formData.id, postData)
                 .then(() => {
+                    instance.setData(postData);
                     updateLocalStorage(formData, { type: 'EDIT_CAT' });
                     setTimeout(() => {
                         popupEdit.close();
@@ -274,10 +275,31 @@ function handleCardEdit(target) {
     });
 }
 
-function handleCardDelete(target) {
-    const cardId = target.dataset.id;
-    target.remove();
-    api.deleteCatById(cardId);
-    localStorage.removeItem('catsRefresh');
-    updateLocalStorage(cardId, 'DELETE_CAT');
+function handleCardLike(instance) {
+    const cardId = instance.getElement().dataset.id;
+    const data = instance.getData();
+    const favoriteNew = data.favorite ? false : true;
+    
+    data.favorite = favoriteNew;
+    api.updateCatById(cardId, data).then(() => {
+        instance.setData(data);
+        updateLocalStorage(data, { type: 'EDIT_CAT' });
+        setTimeout(() => {
+            checkLocalStorage();
+        }, 100);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
+function handleCardDelete(instance) {
+    const startDel = confirm("Вы действительно собираетесь удалить кота?");
+    const cardId = instance.getElement().dataset.id;
+    if (startDel) {
+        instance.getElement().remove();
+        api.deleteCatById(cardId);
+        localStorage.removeItem('catsRefresh');
+        updateLocalStorage(cardId, 'DELETE_CAT');
+    }
 }

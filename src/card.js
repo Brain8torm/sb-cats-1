@@ -7,6 +7,7 @@ export class Card {
     #handleCardMouseLeave;
     #handleCardEdit;
     #handleCardDelete;
+    #handleCardLike;
 
     #getTemplate() {
         const template = document
@@ -22,7 +23,8 @@ export class Card {
         handleCardMouseLeave,
         handleCardClick,
         handleCardEdit,
-        handleCardDelete
+        handleCardDelete,
+        handleCardLike
     ) {
         this.#data = data;
         this.#selectorTemplate = selectorTemplate;
@@ -31,25 +33,37 @@ export class Card {
         this.#handleCardMouseLeave = handleCardMouseLeave;
         this.#handleCardEdit = handleCardEdit;
         this.#handleCardDelete = handleCardDelete;
+        this.#handleCardLike = handleCardLike;
+    }
+
+    setData(data) {
+        this.#data = { ...this.#data, ...data };
+        this.updateView();
+    }
+
+    getData() {
+        return this.#data;
+    }
+
+    updateView() {
+        const cardClass = [`card-${this.#data.id}`];
+        if (this.#data.favorite) cardClass.push('card-favorite');
+        this.#element.classList.add(...cardClass);
+        this.#element.dataset.id = this.#data.id;
+        this.cardTitleElement.textContent = this.#data.name;
+        if (this.#data.image) {
+            this.cardImageElement.src = this.#data.image;
+        }
     }
 
     getElement() {
         this.#element = this.#getTemplate().cloneNode(true);
 
-        const cardClass = [`card-${this.#data.id}`];
-
-        if (this.#data.favorite) cardClass.push('card-favorite');
-        this.#element.classList.add(...cardClass);
-        this.#element.dataset.id = this.#data.id;
-
-        const cardTitleElement = this.#element.querySelector('.card__title');
-        const cardImageElement = this.#element.querySelector('.card__image');
+        this.cardTitleElement = this.#element.querySelector('.card__title');
+        this.cardImageElement = this.#element.querySelector('.card__image');
         const cardHoverElement = this.#element.querySelector('.card__hover');
 
-        cardTitleElement.textContent = this.#data.name;
-        if (this.#data.image) {
-            cardImageElement.src = this.#data.image;
-        }
+        this.updateView();
 
         cardHoverElement.addEventListener('click', () => {
             this.#handleCardClick(this.#data);
@@ -64,11 +78,15 @@ export class Card {
         });
 
         this.#element.querySelector('.card__edit').addEventListener('click', (e) => {
-            this.#handleCardEdit(this.#element);
-        })
+            this.#handleCardEdit(this);
+        });
 
         this.#element.querySelector('.card__delete').addEventListener('click', (e) => {
-            this.#handleCardDelete(this.#element);
+            this.#handleCardDelete(this);
+        });
+
+        this.#element.querySelector('.card__favorite').addEventListener('click', (e) => {
+            this.#handleCardLike(this);
         });
 
         return this.#element;
