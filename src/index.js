@@ -221,7 +221,8 @@ function createCard(data) {
         handleCardMouseLeave,
         handleCardClick,
         handleCardEdit,
-        handleCardDelete
+        handleCardDelete,
+        handleCardLike
     );
 
     cardsContainer.append(newElement.getElement());
@@ -271,6 +272,21 @@ function handleCardEdit(target) {
                     console.log(err);
                 });
         }
+    });
+}
+
+function handleCardLike(target, favorite) {
+    const cardId = target.dataset.id;
+    const favoriteNew = favorite ? !favorite : favorite;
+    const data = { 'favorite': favorite };
+    api.updateCatById(cardId, { 'favorite': favorite }).then(() => {
+        updateLocalStorage(data, { type: 'EDIT_CAT' });
+        setTimeout(() => {
+            checkLocalStorage();
+        }, 100);
+    })
+    .catch((err) => {
+        console.log(err);
     });
 }
 

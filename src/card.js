@@ -7,6 +7,7 @@ export class Card {
     #handleCardMouseLeave;
     #handleCardEdit;
     #handleCardDelete;
+    #handleCardLike;
 
     #getTemplate() {
         const template = document
@@ -22,7 +23,8 @@ export class Card {
         handleCardMouseLeave,
         handleCardClick,
         handleCardEdit,
-        handleCardDelete
+        handleCardDelete,
+        handleCardLike
     ) {
         this.#data = data;
         this.#selectorTemplate = selectorTemplate;
@@ -31,6 +33,7 @@ export class Card {
         this.#handleCardMouseLeave = handleCardMouseLeave;
         this.#handleCardEdit = handleCardEdit;
         this.#handleCardDelete = handleCardDelete;
+        this.#handleCardLike = handleCardLike;
     }
 
     getElement() {
@@ -69,6 +72,10 @@ export class Card {
 
         this.#element.querySelector('.card__delete').addEventListener('click', (e) => {
             this.#handleCardDelete(this.#element);
+        });
+
+        this.#element.querySelector('.card__favorite').addEventListener('click', (e) => {
+            this.#handleCardLike(this.#element, this.#data.favorite);
         });
 
         return this.#element;
