@@ -310,6 +310,25 @@ html {
     transform: scale(1.5);
 }
 
+.popup-card_actions {
+    display: flex;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.popup-card__favorite,
+.popup-card__edit,
+.popup-card__delete {
+    position: relative;
+    right: auto;
+    padding: 10px;
+    opacity: 1;
+    transition: right 0.3s ease-in, opacity 0.8s ease;
+}
+
 .rating__icon {
     color: #ff8f17;
 }
@@ -668,8 +687,7 @@ button.icon:not(:disabled) {
 * + .notify-message {
     margin-top: 10px;
 }
-sa
-.notify-message-primary {
+sa .notify-message-primary {
     color: #fff;
     background-color: rgba(131, 214, 222, 0.8);
 }

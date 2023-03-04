@@ -29,8 +29,9 @@ export class PopupCard extends Popup {
     }
 
     setEventListener() {
-        const btnDeleteCat = this._popupElement.querySelector('.card-actions_delete');
-        const btnEditCat = this._popupElement.querySelector('.card-actions_edit');
+        const btnLikeCat = this._popupElement.querySelector('.popup-card__favorite');
+        const btnDeleteCat = this._popupElement.querySelector('.popup-card__delete');
+        const btnEditCat = this._popupElement.querySelector('.popup-card__edit');
 
         setTimeout(() => {
             const cardId = this._popupElement.dataset.id;
@@ -47,6 +48,14 @@ export class PopupCard extends Popup {
             btnEditCat.addEventListener('click', () => {
                 cardEl.querySelector('.card__edit-icon').click();
                 this.close();
+            });
+            btnLikeCat.addEventListener('click', (e) => {
+                cardEl.querySelector('.card__favorite-icon').click();
+                if (e.target.closest('.popup-card').classList.contains('card-favorite')) {
+                    e.target.closest('.popup-card').classList.remove('card-favorite');
+                } else {
+                    e.target.closest('.popup-card').classList.add('card-favorite')
+                }
             });
         }, 100);
 
