@@ -35,8 +35,8 @@ export class PopupCard extends Popup {
         setTimeout(() => {
             const cardId = this._popupElement.dataset.id;
             const cardEl = document.querySelector(`.card-${cardId}`);
+            
             btnDeleteCat.addEventListener('click', () => {
-                cardEl.remove();
                 setTimeout(() => {
                     this.close();
                 }, 100);

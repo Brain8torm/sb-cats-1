@@ -1,6 +1,5 @@
 export class Popup {
     #selectorTemplate;
-    //#selectorContent;
 
     #getTemplate() {
         const template = document
@@ -65,7 +64,6 @@ export class Popup {
             if (popupClasses.contains('popup-edit')) {
                 inputId.disabled = true;
                 this._popupElement.querySelector('.button').textContent = 'Изменить';
-                localStorage.setItem('formData', JSON.stringify(data));
             }
 
             inputId.value = data.id ? data.id : '';
