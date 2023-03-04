@@ -36,7 +36,7 @@ export class PopupCard extends Popup {
         setTimeout(() => {
             const cardId = this._popupElement.dataset.id;
             const cardEl = document.querySelector(`.card-${cardId}`);
-            
+
             btnDeleteCat.addEventListener('click', () => {
                 setTimeout(() => {
                     this.close();
@@ -54,7 +54,7 @@ export class PopupCard extends Popup {
                 if (e.target.closest('.popup-card').classList.contains('card-favorite')) {
                     e.target.closest('.popup-card').classList.remove('card-favorite');
                 } else {
-                    e.target.closest('.popup-card').classList.add('card-favorite')
+                    e.target.closest('.popup-card').classList.add('card-favorite');
                 }
             });
         }, 100);

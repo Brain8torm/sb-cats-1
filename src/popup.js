@@ -85,7 +85,7 @@ export class Popup {
         document.removeEventListener('keyup', this.#handleEscUp);
 
         const popupClasses = this._popupElement.classList;
-        
+
         if (popupClasses.contains('popup-add') || popupClasses.contains('popup-edit')) {
             localStorage.removeItem('formData');
         }

@@ -1,4 +1,4 @@
-export class Notify{
+export class Notify {
     #selectorTemplate;
 
     #getTemplate() {
@@ -46,7 +46,7 @@ export class Notify{
         document.removeEventListener('keyup', this.#handleEscUp);
 
         const notifyClasses = this._notifyElement.classList;
-        
+
         this._notifyElement.remove();
     }
 
