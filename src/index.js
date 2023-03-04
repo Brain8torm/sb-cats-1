@@ -294,9 +294,12 @@ function handleCardLike(instance) {
 }
 
 function handleCardDelete(instance) {
+    const startDel = confirm("Вы действительно собираетесь удалить кота?");
     const cardId = instance.getElement().dataset.id;
-    instance.getElement().remove();
-    api.deleteCatById(cardId);
-    localStorage.removeItem('catsRefresh');
-    updateLocalStorage(cardId, 'DELETE_CAT');
+    if (startDel) {
+        instance.getElement().remove();
+        api.deleteCatById(cardId);
+        localStorage.removeItem('catsRefresh');
+        updateLocalStorage(cardId, 'DELETE_CAT');
+    }
 }
