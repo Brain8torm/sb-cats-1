@@ -39,11 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = serializeForm(elementsFormLogin);
                 Cookies.set('email', formData.email, { expires: 1 });
                 popupLogin.close();
-                notify = new Notify(
-                    '#notify-template',
-                    'Вы вошли :)',
-                    'notify-message-success'
-                );
+                notify = new Notify('#notify-template', 'Вы вошли :)', 'notify-message-success');
                 document.body.append(notify.getElement());
                 notify.setEventListener();
                 notify.open();
@@ -62,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleCardClick(data) {
-    popupCard = new PopupCard('#popup-template', '#popup-card-template', '', 'popup-card');
+    const classes = ['popup-card']; 
+    if ( data.favorite ) classes.push('card-favorite');
+    popupCard = new PopupCard('#popup-template', '#popup-card-template', '', classes.join(','));
 
     if (!document.body.contains(document.querySelector('.popup-card'))) {
         document.body.append(popupCard.getElement());
@@ -157,11 +155,7 @@ btnLogout.addEventListener('click', (e) => {
     btnLogout.classList.add('hidden');
     btnOpenPopupLogin.classList.remove('hidden');
     btnOpenPopup.classList.add('hidden');
-    notify = new Notify(
-        '#notify-template',
-        'Вы вышли :(',
-        'notify-message-warning'
-    );
+    notify = new Notify('#notify-template', 'Вы вышли :(', 'notify-message-warning');
     document.body.append(notify.getElement());
     notify.setEventListener();
     notify.open();
@@ -296,7 +290,11 @@ function handleCardEdit(instance) {
                         setTimeout(() => {
                             popupEdit.close();
                             checkLocalStorage();
-                            notify = new Notify('#notify-template', 'Вы изменили данные о котике', 'notify-message-success');
+                            notify = new Notify(
+                                '#notify-template',
+                                'Вы изменили данные о котике',
+                                'notify-message-success'
+                            );
                             document.body.append(notify.getElement());
                             notify.setEventListener();
                             notify.open();
@@ -356,7 +354,11 @@ function handleCardDelete(instance) {
 
             setTimeout(() => {
                 checkLocalStorage();
-                notify = new Notify('#notify-template', 'Вы удалили котика', 'notify-message-danger');
+                notify = new Notify(
+                    '#notify-template',
+                    'Вы удалили котика',
+                    'notify-message-danger'
+                );
                 document.body.append(notify.getElement());
                 notify.setEventListener();
                 notify.open();
