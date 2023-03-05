@@ -33,6 +33,13 @@ html {
     max-height: 40px;
 }
 
+.header.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
 .main {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -578,6 +585,14 @@ button.icon:not(:disabled) {
     position: relative;
 }
 
+@media (max-width: 639px) {
+    .button {
+        padding: 0 15px;
+        line-height: 28px;
+        font-size: 13px;
+    }
+}
+
 .button:hover {
     text-decoration: none;
 }
@@ -743,6 +758,30 @@ sa .notify-message-primary {
 .order-controls .order-toggle_active {
     background: rgb(70, 159, 168);
     color: #fff;
+}
+
+.on-top-button {
+    background-color: rgb(151, 206, 104, .6);
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 48px;
+    width: 48px;
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 0.5s ease;
+    display: block;
+    text-align: center;
+}
+
+.on-top-button.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @keyframes zoomIn {

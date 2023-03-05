@@ -85,8 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         checkLocalStorage();
     });
-
-    
 });
 
 function handleCardClick(data) {
@@ -427,3 +425,31 @@ function handleCardDelete(instance) {
         notify.open();
     }
 }
+
+const headerEl = document.querySelector('.header');
+const sticky = headerEl.clientHeight;
+const rootEl = document.body;
+const scrollToTopBtn = document.querySelector('.on-top-button');
+
+window.addEventListener('scroll', (e) => {
+    if (window.pageYOffset > sticky) {
+        headerEl.classList.add('sticky');
+    } else {
+        headerEl.classList.remove('sticky');
+    }
+
+    const scrollableHeight =
+        document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if (document.documentElement.scrollTop / scrollableHeight > 0.5) {
+        scrollToTopBtn.classList.add('show');
+    } else {
+        scrollToTopBtn.classList.remove('show');
+    }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
+});
