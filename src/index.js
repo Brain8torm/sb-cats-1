@@ -11,6 +11,7 @@ const btnOpenPopup = document.querySelector('.toggle-popup');
 const btnOpenPopupLogin = document.querySelector('.toggle-login-popup');
 const btnLogout = document.querySelector('.toggle-logout');
 const cards = cardsContainer.querySelectorAll('.card');
+const orderBtnName = document.querySelector('.order-toggle_name');
 const orderBtnRate = document.querySelector('.order-toggle_rate');
 const orderBtnFavorite = document.querySelector('.order-toggle_favorite');
 
@@ -67,11 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (order && order === 'favorite') {
         orderBtnFavorite.classList.add('order-toggle_active');
     }
+    if (order && order === 'name') {
+        orderBtnName.classList.add('order-toggle_active');
+    }
 
     orderBtnRate.addEventListener('click', (e) => {
         if (!e.target.classList.contains('order-toggle_active')) {
-            e.target.classList.toggle('order-toggle_active');
-            orderBtnFavorite.classList.toggle('order-toggle_active');
+            e.target.classList.add('order-toggle_active');
+            orderBtnFavorite.classList.remove('order-toggle_active');
+            orderBtnName.classList.remove('order-toggle_active');
             localStorage.setItem('order', 'rate');
             checkLocalStorage();
         }
@@ -79,11 +84,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     orderBtnFavorite.addEventListener('click', (e) => {
         if (!e.target.classList.contains('order-toggle_active')) {
-            e.target.classList.toggle('order-toggle_active');
-            orderBtnRate.classList.toggle('order-toggle_active');
+            e.target.classList.add('order-toggle_active');
+            orderBtnRate.classList.remove('order-toggle_active');
+            orderBtnName.classList.remove('order-toggle_active');
             localStorage.setItem('order', 'favorite');
+            checkLocalStorage();
         }
-        checkLocalStorage();
+        
+    });
+
+    orderBtnName.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('order-toggle_active')) {
+            e.target.classList.add('order-toggle_active');
+            orderBtnRate.classList.remove('order-toggle_active');
+            orderBtnFavorite.classList.remove('order-toggle_active');
+            localStorage.setItem('order', 'name');
+            checkLocalStorage();
+        }
+        
     });
 });
 
@@ -228,8 +246,14 @@ function checkLocalStorage() {
                 return b.favorite - a.favorite;
             });
         }
+        if (order && order === 'name') {
+            localData.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+        }
 
         localData.forEach((catData) => {
+            console.log(`${catData.name} ${catData.rate} ${catData.favorite}`);
             createCard(catData);
         });
     } else {
@@ -243,6 +267,17 @@ function checkLocalStorage() {
                 if (order && order === 'favorite') {
                     data.sort((a, b) => {
                         return b.favorite - a.favorite;
+                    });
+                }
+                if (order && order === 'name') {
+                    data.sort((a, b) => {
+                        if (a > b) {
+                            return -1;
+                        }
+                        if (b > a) {
+                            return 1;
+                        }
+                        return 0;
                     });
                 }
 
