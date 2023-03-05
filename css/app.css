@@ -726,6 +726,25 @@ sa .notify-message-primary {
     color: #fff;
 }
 
+.order-controls {
+    display: flex;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.order-controls span {
+    margin-left: 15px;
+}
+
+.order-controls span:first-child {
+    margin-left: 0;
+}
+
+.order-controls .order-toggle_active {
+    background: rgb(70, 159, 168);
+    color: #fff;
+}
+
 @keyframes zoomIn {
     from {
         opacity: 0;
