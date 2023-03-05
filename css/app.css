@@ -333,6 +333,9 @@ html {
     color: #ff8f17;
 }
 
+.popup-card_rating .rating__stars span {
+    color: rgba(131, 214, 222, 1);
+}
 .icon {
     margin: 0;
     border: none;
