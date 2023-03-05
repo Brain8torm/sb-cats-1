@@ -26,6 +26,8 @@ export class PopupCard extends Popup {
         popupCardRatingEl.textContent = `${data.rate} / 10`;
 
         super.open();
+
+        this.showRatingStars(data.rate);
     }
 
     setEventListener() {
@@ -60,5 +62,18 @@ export class PopupCard extends Popup {
         }, 100);
 
         super.setEventListener();
+    }
+
+    showRatingStars(rate) {
+        const ratingStarsEl = this._popupElement.querySelector('.rating__stars');
+        for (let i = 1; i <= 10; i++) {
+            const starEl = document.createElement('span');
+            if (i <= parseInt(rate)) {
+                starEl.classList.add('la', 'la-star');
+            } else {
+                starEl.classList.add('la', 'la-star-o');
+            }
+            ratingStarsEl.append(starEl);
+        }
     }
 }

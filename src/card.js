@@ -50,6 +50,7 @@ export class Card {
         if (this.#data.favorite) cardClass.push('card-favorite');
         this.#element.classList.add(...cardClass);
         this.#element.dataset.id = this.#data.id;
+        this.#element.dataset.rate = this.#data.rate;
         this.cardTitleElement.textContent = this.#data.name;
         if (this.#data.image) {
             this.cardImageElement.src = this.#data.image;

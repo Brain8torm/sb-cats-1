@@ -333,6 +333,9 @@ html {
     color: #ff8f17;
 }
 
+.popup-card_rating .rating__stars span {
+    color: rgba(131, 214, 222, 1);
+}
 .icon {
     margin: 0;
     border: none;
@@ -720,6 +723,25 @@ sa .notify-message-primary {
 .notify-message-success .notify-close,
 .notify-message-danger .notify-close,
 .notify-message-primary .notify-close {
+    color: #fff;
+}
+
+.order-controls {
+    display: flex;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.order-controls span {
+    margin-left: 15px;
+}
+
+.order-controls span:first-child {
+    margin-left: 0;
+}
+
+.order-controls .order-toggle_active {
+    background: rgb(70, 159, 168);
     color: #fff;
 }
 

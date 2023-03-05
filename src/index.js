@@ -11,16 +11,21 @@ const btnOpenPopup = document.querySelector('.toggle-popup');
 const btnOpenPopupLogin = document.querySelector('.toggle-login-popup');
 const btnLogout = document.querySelector('.toggle-logout');
 const cards = cardsContainer.querySelectorAll('.card');
+const orderBtnRate = document.querySelector('.order-toggle_rate');
+const orderBtnFavorite = document.querySelector('.order-toggle_favorite');
 
 let popupAdd = null;
 let popupCard = null;
 let popupLogin = null;
 let popupEdit = null;
 let notify = null;
+let order = null;
 
 const isAuth = Cookies.get('email');
 
 document.addEventListener('DOMContentLoaded', () => {
+    checkLocalStorage();
+
     document.querySelector('.footer__copyrights_year').textContent = new Date().getFullYear();
 
     popupLogin = new Popup('#popup-template', '#form-auth', 'Авторизация', 'popup-login');
@@ -54,12 +59,39 @@ document.addEventListener('DOMContentLoaded', () => {
         btnOpenPopup.classList.remove('hidden');
     }
 
-    checkLocalStorage();
+    order = localStorage.getItem('order');
+
+    if (order && order === 'rate') {
+        orderBtnRate.classList.add('order-toggle_active');
+    }
+    if (order && order === 'favorite') {
+        orderBtnFavorite.classList.add('order-toggle_active');
+    }
+
+    orderBtnRate.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('order-toggle_active')) {
+            e.target.classList.toggle('order-toggle_active');
+            orderBtnFavorite.classList.toggle('order-toggle_active');
+            localStorage.setItem('order', 'rate');
+            checkLocalStorage();
+        }
+    });
+
+    orderBtnFavorite.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('order-toggle_active')) {
+            e.target.classList.toggle('order-toggle_active');
+            orderBtnRate.classList.toggle('order-toggle_active');
+            localStorage.setItem('order', 'favorite');
+        }
+        checkLocalStorage();
+    });
+
+    
 });
 
 function handleCardClick(data) {
-    const classes = ['popup-card']; 
-    if ( data.favorite ) classes.push('card-favorite');
+    const classes = ['popup-card'];
+    if (data.favorite) classes.push('card-favorite');
     popupCard = new PopupCard('#popup-template', '#popup-card-template', '', classes.join(','));
 
     if (!document.body.contains(document.querySelector('.popup-card'))) {
@@ -185,16 +217,41 @@ function checkLocalStorage() {
         cardsContainer.innerHTML = '';
     }
 
+    const order = localStorage.getItem('order');
+
     if (localData && localData.length && new Date() < new Date(getTimeExpires)) {
+        if (order && order === 'rate') {
+            localData.sort((a, b) => {
+                return b.rate - a.rate;
+            });
+        }
+        if (order && order === 'favorite') {
+            localData.sort((a, b) => {
+                return b.favorite - a.favorite;
+            });
+        }
+
         localData.forEach((catData) => {
             createCard(catData);
         });
     } else {
         api.getAllCats()
             .then((data) => {
+                if (order && order === 'rate') {
+                    data.sort((a, b) => {
+                        return b.rate - a.rate;
+                    });
+                }
+                if (order && order === 'favorite') {
+                    data.sort((a, b) => {
+                        return b.favorite - a.favorite;
+                    });
+                }
+
                 data.forEach((catData) => {
                     createCard(catData);
                 });
+
                 setDataRefresh(MAX_LIVE_STORAGE, 'catsRefresh');
                 updateLocalStorage(data, { type: 'ALL_CATS' });
             })
