@@ -33,6 +33,13 @@ html {
     max-height: 40px;
 }
 
+.header.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
 .main {
     padding-top: 30px;
     padding-bottom: 30px;

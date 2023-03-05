@@ -85,8 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         checkLocalStorage();
     });
-
-    
 });
 
 function handleCardClick(data) {
@@ -427,3 +425,16 @@ function handleCardDelete(instance) {
         notify.open();
     }
 }
+
+const header = document.querySelector('.header');
+const sticky = header.clientHeight;
+
+window.addEventListener('scroll', (e) => {
+    if (window.pageYOffset > sticky) {
+        header.classList.add('sticky');
+    } else {
+        header.classList.remove('sticky');
+    }
+
+    console.log(sticky, window.pageYOffset);
+});
