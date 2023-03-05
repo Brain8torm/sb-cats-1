@@ -253,7 +253,6 @@ function checkLocalStorage() {
         }
 
         localData.forEach((catData) => {
-            console.log(`${catData.name} ${catData.rate} ${catData.favorite}`);
             createCard(catData);
         });
     } else {
