@@ -578,6 +578,14 @@ button.icon:not(:disabled) {
     position: relative;
 }
 
+@media (max-width: 639px) {
+    .button {
+        padding: 0 15px;
+        line-height: 28px;
+        font-size: 13px;
+    }
+}
+
 .button:hover {
     text-decoration: none;
 }
