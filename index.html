@@ -26,7 +26,8 @@
         </header>
         <main class="main container">
             <div class="order-controls">
-                <span class="button button-circle order-toggle_rate">По рейтигу</span><span class="button button-circle order-toggle_favorite">Любимчики</span>
+                <span class="button button-circle order-toggle_rate">По рейтигу</span
+                ><span class="button button-circle order-toggle_favorite">Любимчики</span>
             </div>
             <section class="cards"></section>
         </main>
@@ -80,12 +81,10 @@
             <div class="popup-card_data">
                 <div class="popup-card_rating rating">
                     <div class="rating__numbers">
-                    <span class="la la-2x la-star-o rating__icon"></span>
-                    <span class="rating__value la-2x">0 / 10</span>
+                        <span class="la la-2x la-star-o rating__icon"></span>
+                        <span class="rating__value la-2x">0 / 10</span>
                     </div>
-                    <div class="rating__stars">
-                        
-                    </div>
+                    <div class="rating__stars"></div>
                 </div>
                 <div class="popup-card_title"></div>
                 <div class="popup-card_year"></div>
@@ -146,6 +145,8 @@
                 </div>
             </div>
         </template>
+
+        <div class="on-top-button"><span class="la la-chevron-up on-top-button__icon"></span></div>
 
         <script src="./src/index.js" defer type="module"></script>
     </body>

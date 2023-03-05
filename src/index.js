@@ -426,15 +426,30 @@ function handleCardDelete(instance) {
     }
 }
 
-const header = document.querySelector('.header');
-const sticky = header.clientHeight;
+const headerEl = document.querySelector('.header');
+const sticky = headerEl.clientHeight;
+const rootEl = document.body;
+const scrollToTopBtn = document.querySelector('.on-top-button');
 
 window.addEventListener('scroll', (e) => {
     if (window.pageYOffset > sticky) {
-        header.classList.add('sticky');
+        headerEl.classList.add('sticky');
     } else {
-        header.classList.remove('sticky');
+        headerEl.classList.remove('sticky');
     }
 
-    console.log(sticky, window.pageYOffset);
+    const scrollableHeight =
+        document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if (document.documentElement.scrollTop / scrollableHeight > 0.5) {
+        scrollToTopBtn.classList.add('show');
+    } else {
+        scrollToTopBtn.classList.remove('show');
+    }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
 });
